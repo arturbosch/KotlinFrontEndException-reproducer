@@ -1,7 +1,7 @@
-package org.jetbrains.plugins.template.services
+package com.github.arturbosch.kotlinfrontendexceptionreproducer.services
 
 import com.axivion.client_data_processing.issue_data_source.IssueKind
-import org.jetbrains.plugins.template.MyBundle
+import com.github.arturbosch.kotlinfrontendexceptionreproducer.MyBundle
 
 class MyApplicationService {
 
