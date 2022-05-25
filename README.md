@@ -5,7 +5,11 @@
 
 ![alt](files.png)
 
-- Run `gradle build` and notice following error when compiling `src/main/kotlin/org/jetbrains/plugins/template/services/MyApplicationService.kt` due to class file `IssueKind.class`:
+- Run `gradle build` and notice following error when
+  compiling `src/main/kotlin/org/jetbrains/plugins/template/services/MyApplicationService.kt` due to class
+  file `IssueKind.class`:
+
+#### With kotlinOptions.useFir = false
 
 ```
 e: org.jetbrains.kotlin.util.KotlinFrontEndException: Exception while analyzing expression at (10,17) in /home/boschar/Repos/reproducer/intellij-platform-plugin-template/src/main/kotlin/org/jetbrains/plugins/template/services/MyApplicationService.kt
@@ -151,4 +155,59 @@ Caused by: java.lang.IllegalStateException: Could not read class VirtualFile: /h
         at org.jetbrains.kotlin.resolve.calls.tower.TowerResolver$Task.run$processScopes(TowerResolver.kt:277)
         at org.jetbrains.kotlin.resolve.calls.tower.TowerResolver$Task.run(TowerResolver.kt:302)
         at org.jetbrains.kotlin.resolve.calls.tower.TowerResolver.run(TowerResolver.kt:111)
+```
+
+#### with kotlinOptions.useFir = true
+
+```
+> Task :compileKotlin FAILED
+e: java.lang.IllegalArgumentException: Unexpected versionNeededToExtract (0) at META-INF/jb/$$size$$
+        at org.jetbrains.kotlin.cli.jvm.compiler.jarfs.ZipImplementationKt.parseCentralDirectory(ZipImplementation.kt:110)
+        at org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarHandler.<init>(FastJarHandler.kt:25)
+        at org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarFileSystem$myHandlers$1.fun(FastJarFileSystem.kt:24)
+        at org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarFileSystem$myHandlers$1.fun(FastJarFileSystem.kt:22)
+        at org.jetbrains.kotlin.com.intellij.util.containers.ConcurrentFactoryMap$2.create(ConcurrentFactoryMap.java:174)
+        at org.jetbrains.kotlin.com.intellij.util.containers.ConcurrentFactoryMap.get(ConcurrentFactoryMap.java:40)
+        at org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarFileSystem.findFileByPath(FastJarFileSystem.kt:51)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment.findJarRoot(KotlinCoreEnvironment.kt:433)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment.contentRootToVirtualFile(KotlinCoreEnvironment.kt:411)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment.access$contentRootToVirtualFile(KotlinCoreEnvironment.kt:111)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment$3.invoke(KotlinCoreEnvironment.kt:259)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment$3.invoke(KotlinCoreEnvironment.kt:111)
+        at org.jetbrains.kotlin.cli.jvm.compiler.ClasspathRootsResolver.convertClasspathRoots(ClasspathRootsResolver.kt:75)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment.<init>(KotlinCoreEnvironment.kt:267)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment.<init>(KotlinCoreEnvironment.kt:111)
+        at org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment$Companion.createForProduction(KotlinCoreEnvironment.kt:475)
+        at org.jetbrains.kotlin.cli.jvm.K2JVMCompiler.createCoreEnvironment(K2JVMCompiler.kt:229)
+        at org.jetbrains.kotlin.cli.jvm.K2JVMCompiler.doExecute(K2JVMCompiler.kt:155)
+        at org.jetbrains.kotlin.cli.jvm.K2JVMCompiler.doExecute(K2JVMCompiler.kt:54)
+        at org.jetbrains.kotlin.cli.common.CLICompiler.execImpl(CLICompiler.kt:91)
+        at org.jetbrains.kotlin.cli.common.CLICompiler.execImpl(CLICompiler.kt:43)
+        at org.jetbrains.kotlin.cli.common.CLITool.exec(CLITool.kt:93)
+        at org.jetbrains.kotlin.incremental.IncrementalJvmCompilerRunner.runCompiler(IncrementalJvmCompilerRunner.kt:471)
+        at org.jetbrains.kotlin.incremental.IncrementalJvmCompilerRunner.runCompiler(IncrementalJvmCompilerRunner.kt:123)
+        at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compileIncrementally(IncrementalCompilerRunner.kt:367)
+        at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compileIncrementally$default(IncrementalCompilerRunner.kt:309)
+        at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compileImpl$rebuild(IncrementalCompilerRunner.kt:115)
+        at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compileImpl(IncrementalCompilerRunner.kt:167)
+        at org.jetbrains.kotlin.incremental.IncrementalCompilerRunner.compile(IncrementalCompilerRunner.kt:77)
+        at org.jetbrains.kotlin.daemon.CompileServiceImplBase.execIncrementalCompiler(CompileServiceImpl.kt:623)
+        at org.jetbrains.kotlin.daemon.CompileServiceImplBase.access$execIncrementalCompiler(CompileServiceImpl.kt:101)
+        at org.jetbrains.kotlin.daemon.CompileServiceImpl.compile(CompileServiceImpl.kt:1718)
+        at jdk.internal.reflect.GeneratedMethodAccessor103.invoke(Unknown Source)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+        at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:359)
+        at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+        at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+        at java.base/java.security.AccessController.doPrivileged(Native Method)
+        at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+        at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:562)
+        at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:796)
+        at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:677)
+        at java.base/java.security.AccessController.doPrivileged(Native Method)
+        at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:676)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+        at java.base/java.lang.Thread.run(Thread.java:829)
 ```

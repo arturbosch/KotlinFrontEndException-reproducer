@@ -52,6 +52,8 @@ tasks {
         }
         withType<KotlinCompile> {
             kotlinOptions.jvmTarget = it
+            // TODO: try with fir for different error
+            // kotlinOptions.useFir = true
         }
     }
 
